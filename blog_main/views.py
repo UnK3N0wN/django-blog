@@ -37,6 +37,7 @@ def register(request):
     return render(request, 'register.html', context)
 
 def login(request):
+    # always provide a form instance for rendering
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
@@ -47,8 +48,9 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
             return redirect('dashboard')
-        
+        # if form is not valid fall through to re-render with errors
     form = AuthenticationForm()
+
     context = {
         'form': form,
     }
