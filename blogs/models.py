@@ -43,5 +43,17 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+    
+class Report(models.Model):
+    post = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="reports")
+    reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    reason = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'reported_by')  # prevent duplicate reports
+
+    def __str__(self):
+        return f"{self.reported_by} reported {self.post.title}"
 
     

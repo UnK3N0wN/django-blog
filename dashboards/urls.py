@@ -18,4 +18,6 @@ urlpatterns = [
     path('users/add/', views.add_user, name='add_user'),
     path('users/edit/<int:pk>/', views.edit_user, name='edit_user'),
     path('users/delete/<int:pk>/', views.delete_user, name='delete_user'),
+    path('report-post/<int:pk>/', views.report_post, name='report_post'),
+    path('my-posts/', views.my_posts, name='my_posts'),
 ]

@@ -6,6 +6,7 @@
         {% endif %}
         <a href="{% url 'categories' %}" class="nav-link text-dark {% if '/categories/' in request.path %}bg-warning{% endif %}">Categories</a>
         <a href="{% url 'posts' %}" class="nav-link text-dark {% if '/posts/' in request.path %}bg-warning{% endif %}">Posts</a>
-        <a class="nav-link text-dark">Logout</a>
+        <a href="{% url 'my_posts' %}" class="nav-link text-dark {% if '/my-posts/' in request.path %}bg-warning{% endif %}">My Posts</a>
+        <a href="{% url 'logout' %}" class="nav-link text-dark {% if '/logout/' in request.path %}bg-warning{% endif %}">Logout</a>
     </div>
 </div>
