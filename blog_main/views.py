@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.contrib import messages
 from assignments.models import About
 from blogs.models import Blog, Category
 from .forms import RegistrationForm
@@ -26,36 +27,44 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('register')
+            messages.success(request, '🎉 Account created successfully! Please login.')
+            return redirect('login')
         else:
-            print(form.errors)
+            messages.error(request, '❌ Please correct the errors below.')
     else:
         form = RegistrationForm()
+
     context = {
         'form': form,
     }
     return render(request, 'register.html', context)
 
+
 def login(request):
-    # always provide a form instance for rendering
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-
-            user = auth.authenticate(username=username, password=password)
+            user = auth.authenticate(request, username=username, password=password)
             if user is not None:
                 auth.login(request, user)
-            return redirect('dashboard')
-        # if form is not valid fall through to re-render with errors
-    form = AuthenticationForm()
+                messages.success(request, f'👋 Welcome back, {user.username}!')
+                return redirect('dashboard')
+            else:
+                messages.error(request, '❌ Invalid username or password.')
+        else:
+            messages.error(request, '❌ Invalid username or password.')
+    else:
+        form = AuthenticationForm()
 
     context = {
         'form': form,
     }
     return render(request, 'login.html', context)
 
+
 def logout(request):
     auth.logout(request)
+    messages.info(request, '👋 You have been logged out successfully.')
     return redirect('home')

@@ -1,12 +1,30 @@
 <div class="col-md-3">
-    <div class="nav flex-column nav-pills bg-light" aria-orientation="vertical">
-        <a href="{% url 'dashboard' %}" class="nav-link text-dark {% if '/dashboard/' == request.path %}bg-warning{% endif %}">Dashboard</a>
+    <div class="nav flex-column nav-pills" aria-orientation="vertical">
+        <a href="{% url 'dashboard' %}"
+           class="nav-link text-dark {% if '/dashboard/' == request.path %}bg-warning{% endif %}">
+            <i class="fa fa-tachometer fa-fw"></i> Dashboard
+        </a>
         {% if perms.auth.view_user %}
-        <a href="{% url 'users' %}" class="nav-link text-dark {% if '/users/' in request.path %}bg-warning{% endif %}">Users</a>
+        <a href="{% url 'users' %}"
+           class="nav-link text-dark {% if '/users/' in request.path %}bg-warning{% endif %}">
+            <i class="fa fa-users fa-fw"></i> Users
+        </a>
         {% endif %}
-        <a href="{% url 'categories' %}" class="nav-link text-dark {% if '/categories/' in request.path %}bg-warning{% endif %}">Categories</a>
-        <a href="{% url 'posts' %}" class="nav-link text-dark {% if '/posts/' in request.path %}bg-warning{% endif %}">Posts</a>
-        <a href="{% url 'my_posts' %}" class="nav-link text-dark {% if '/my-posts/' in request.path %}bg-warning{% endif %}">My Posts</a>
-        <a href="{% url 'logout' %}" class="nav-link text-dark {% if '/logout/' in request.path %}bg-warning{% endif %}">Logout</a>
+        <a href="{% url 'categories' %}"
+           class="nav-link text-dark {% if '/categories/' in request.path %}bg-warning{% endif %}">
+            <i class="fa fa-folder-open-o fa-fw"></i> Categories
+        </a>
+        <a href="{% url 'posts' %}"
+           class="nav-link text-dark {% if '/posts/' in request.path and '/my-posts/' not in request.path %}bg-warning{% endif %}">
+            <i class="fa fa-file-text-o fa-fw"></i> All Posts
+        </a>
+        <a href="{% url 'my_posts' %}"
+           class="nav-link text-dark {% if '/my-posts/' in request.path %}bg-warning{% endif %}">
+            <i class="fa fa-pencil fa-fw"></i> My Posts
+        </a>
+        <a href="{% url 'logout' %}"
+           class="nav-link text-dark">
+            <i class="fa fa-sign-out fa-fw"></i> Logout
+        </a>
     </div>
 </div>

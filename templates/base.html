@@ -9,54 +9,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django Blogs</title>
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
     <link href="{% static 'css/blog.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
+</head>
 <body>
     <div class="container">
-      <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-          <div class="col-4 pt-1">
-            <a class="blog-header-logo text-dark" href="/">Django Blog</a>
-          </div>
-          <div class="col-4">
-            <form action="{% url 'search' %}" method="get">
-              <div class="input-group">
-                <input class="form-control" type="text" name="keyword" value="{{ keyword }}" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                <button type="submit" class="btn btn-warning" id="button-search" type="button">Go!</button>
-              </div>
-            </form>
-          </div>
-          <div class="col-4 d-flex justify-content-end align-items-center">
-            {% if not user.is_authenticated %}
-            <a class="btn btn-sm btn-warning" href="{% url 'login' %}">Login</a> &nbsp;
-            <a class="btn btn-sm btn-outline-secondary" href="{% url 'register' %}">Register</a>
-            {% else %}
-            <span><a href="{% url 'dashboard' %}">Dashboard</a></span>
-            &emsp;
-            <span><a href="{% url 'logout' %}">Logout</a></span>
-            {% endif %}
-          </div>
+
+        <!-- ── Header ─────────────────────────────── -->
+        <header class="blog-header py-3">
+            <div class="row flex-nowrap justify-content-between align-items-center">
+
+                <!-- Logo -->
+                <div class="col-4 pt-1">
+                    <a class="blog-header-logo text-dark" href="/">Django Blog</a>
+                </div>
+
+                <!-- Search -->
+                <div class="col-4">
+                    <form action="{% url 'search' %}" method="get">
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                type="text"
+                                name="keyword"
+                                value="{{ keyword }}"
+                                placeholder="Search articles…"
+                                aria-label="Search articles"
+                                aria-describedby="button-search"
+                            />
+                            <button type="submit" class="btn btn-warning" id="button-search">Go!</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Auth links -->
+                <div class="col-4 d-flex justify-content-end align-items-center" style="gap:.75rem;">
+                    {% if not user.is_authenticated %}
+                        <a class="btn btn-sm btn-warning" href="{% url 'login' %}">Login</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'register' %}">Register</a>
+                    {% else %}
+                        <a href="{% url 'dashboard' %}" style="font-size:.88rem;font-weight:500;color:var(--ink-soft);">
+                            <i class="fa fa-tachometer" style="margin-right:.35rem;"></i>Dashboard
+                        </a>
+                        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-secondary">Logout</a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </header>
+
+        <!-- ── Category Nav ───────────────────────── -->
+        <div class="nav-scroller py-1 mb-2">
+            <nav class="nav d-flex justify-content-between">
+                {% for cat in categories %}
+                    <a class="p-2 text-muted" href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a>
+                {% endfor %}
+            </nav>
         </div>
-      </header>
 
-      <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-between">
-          {% for cat in categories %}
-          <a class="p-2 text-muted" href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a>
-          {% endfor %}
-        </nav>
-      </div>
+        <!-- ── Flash Messages ────────────────────── -->
+        {% if messages %}
+        <div class="mt-3 mb-2">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-<!-- Main Content -->
-{% block content %}
-   
-{% endblock %}
+        <!-- ── Main Content ───────────────────────── -->
+        {% block content %}{% endblock %}
 
-<!-- Footer -->
-    <footer class="blog-footer">
-        <p>Django blog built by Someone</a></p>
-    </footer>
+        <!-- ── Footer ─────────────────────────────── -->
+        <footer class="blog-footer">
+            <p>Django Blog &mdash; Built with ❤︎ using Django</p>
+        </footer>
+
+    </div><!-- /container -->
+
+    <!-- Bootstrap JS (needed for alert dismiss button) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

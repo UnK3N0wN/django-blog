@@ -2,26 +2,26 @@
 
 {% block content %}
 
-<!-- Page content-->
-
-<div class="container mt-5">
+<div class="container mt-4">
     <div class="row">
+
+        <!-- ── Article ───────────────────────────── -->
         <div class="col-lg-8">
-            <!-- Post content-->
-             <article>
-                <!-- Post header-->
-                 <header class="mb-4">
-                    <!-- Post title-->
-                    <h1 class="fw-bolder mb-1">{{ single_blog.title }}</h1>
-                    <!-- Post meta + Report -->
-                    <div class="text-muted fst-italic mb-2 d-flex justify-content-between align-items-center">
-                        <span>
-                            Posted on {{ single_blog.created_at }} by {{ single_blog.author }}
+            <article>
+                <!-- Header -->
+                <header class="mb-4">
+                    <h1 class="fw-bolder mb-2">{{ single_blog.title }}</h1>
+
+                    <div class="text-muted fst-italic mb-3 d-flex justify-content-between align-items-center flex-wrap" style="gap:.5rem;">
+                        <span style="font-size:.88rem;">
+                            Posted on {{ single_blog.created_at|date:"F j, Y" }} &mdash; by <strong style="color:var(--ink-soft);">{{ single_blog.author }}</strong>
                         </span>
+
+                        <!-- Report form (only for authenticated non-authors) -->
                         {% if user.is_authenticated and user != single_blog.author %}
-                        <form action="{% url 'report_post' single_blog.id %}" method="POST" class="d-flex align-items-center">
+                        <form action="{% url 'report_post' single_blog.id %}" method="POST" class="d-flex align-items-center" style="gap:.4rem;">
                             {% csrf_token %}
-                            <select name="reason" class="form-select form-select-sm me-2" required>
+                            <select name="reason" class="form-select form-select-sm" required style="font-size:.8rem;padding:.35rem .7rem;">
                                 <option value="">Report reason</option>
                                 <option value="Spam">Spam</option>
                                 <option value="Abusive Content">Abusive Content</option>
@@ -35,90 +35,101 @@
                         </form>
                         {% endif %}
                     </div>
-                    <!-- Post category-->
-                    <a class="badge bg-warning text-decoration-none text-light">
-                        {{ single_blog.category }}
-                    </a>
+
+                    <!-- Category badge -->
+                    <a class="badge bg-warning text-decoration-none">{{ single_blog.category }}</a>
                 </header>
-                <!-- Preview image -->
+
+                <!-- Featured image -->
                 <figure class="mb-4">
-                    <img class="img-fluid rounded" src="{{ single_blog.featured_image.url }}" alt="">
+                    <img class="img-fluid rounded" src="{{ single_blog.featured_image.url }}" alt="{{ single_blog.title }}">
                 </figure>
-                    
-                <!-- Post content-->
+
+                <!-- Body -->
                 <section class="mb-5">
                     <p class="fs-5 mb-4">{{ single_blog.short_description }}</p>
                     <p class="fs-5 mb-4">{{ single_blog.blog_body }}</p>
-                    
+
+                    <hr style="border-color:var(--border-md);margin:2rem 0;">
+
                     <!-- Comments -->
-                    <h4>Comments ({{ comment_count }})</h4>
+                    <h4 style="margin-bottom:1rem;">
+                        <i class="fa fa-comments-o" style="color:var(--accent);margin-right:.4rem;"></i>
+                        Comments <span style="font-size:.85rem;color:var(--ink-muted);font-family:var(--font-body);font-weight:400;">({{ comment_count }})</span>
+                    </h4>
+
                     {% if comments %}
-                    {% for comment in comments %}
-                    <div class="card mt-1">
-                        <div class="card-body">
-                            <p class="card-text mb-0">{{ comment }}</p>
-                            <span>
-                                <small>By {{ comment.user }}</small>
-                                <small>| {{ comment.created_at|timesince }} ago</small>
-                            </span>
-                        </div>                  
-                    </div>
-                    {% endfor %}
+                        {% for comment in comments %}
+                        <div class="card comment-card mt-1">
+                            <div class="card-body">
+                                <p class="card-text mb-1">{{ comment }}</p>
+                                <small style="color:var(--ink-muted);">
+                                    By <strong>{{ comment.user }}</strong> &mdash; {{ comment.created_at|timesince }} ago
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
                     {% else %}
-                    <p>No comments yet</p>
+                        <p style="color:var(--ink-muted);font-style:italic;">No comments yet. Be the first to share your thoughts!</p>
                     {% endif %}
+
                     <br>
+
                     <!-- Comment form -->
-                    <div class="form-group">
-                        {% if user.is_authenticated %}
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <textarea name="comment" class="form-control" placeholder="Add a comment..."></textarea>
-                            <button type="submit" class="btn btn-primary mt-2">Submit</button>
-                        </form>
-                        {% else %}
-                        <p>Please <a href="{% url 'login' %}">login</a> to write a comment!</p>
-                        {% endif %}
-                    </div>
+                    {% if user.is_authenticated %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <textarea name="comment" class="form-control" rows="3" placeholder="Share your thoughts…"></textarea>
+                        <button type="submit" class="btn btn-warning mt-2">Post Comment</button>
+                    </form>
+                    {% else %}
+                    <p style="color:var(--ink-muted);font-size:.9rem;">
+                        <a href="{% url 'login' %}">Login</a> to leave a comment.
+                    </p>
+                    {% endif %}
+
                 </section>
             </article>
-        </div>
-        
-        <!-- Sidebar -->
+        </div><!-- /col-lg-8 -->
+
+        <!-- ── Sidebar ────────────────────────────── -->
         <div class="col-lg-4">
-            <!-- Categories -->
-            <div class="card mb-4 p-3">
+
+            <!-- Categories widget -->
+            <div class="card mb-4 p-0">
                 <h4 class="font-italic">Categories</h4>
-                <div class="card-body">
+                <div class="card-body" style="padding:.75rem 1.2rem;">
                     <ul class="list-unstyled mb-0">
                         {% for cat in categories %}
                         <li>
-                            <a href="{% url 'posts_by_category' cat.id %}">
-                                {{ cat.category_name }}
-                            </a>
+                            <a href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a>
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
 
-            <!-- Social links -->
+            <!-- Social links widget -->
             {% if social_links %}
-            <div class="card mb-4 p-3">
+            <div class="card mb-4 p-0">
                 <h4 class="font-italic">Follow Us</h4>
-                <ol class="list-unstyled">
-                {% for link in social_links %}
-                <li>
-                    <a href="{{ link.link }}" target="_blank">
-                        {{ link.platform }}
-                    </a>
-                </li>
-                {% endfor %}
-                </ol>
+                <div class="card-body" style="padding:.75rem 1.2rem;">
+                    <ol class="list-unstyled mb-0">
+                        {% for link in social_links %}
+                        <li>
+                            <a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-external-link" style="font-size:.75rem;margin-right:.35rem;"></i>{{ link.platform }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
             </div>
             {% endif %}
 
-        </div>
-    </div>
+        </div><!-- /col-lg-4 -->
+
+    </div><!-- /row -->
 </div>
+
 {% endblock %}

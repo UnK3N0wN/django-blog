@@ -2,11 +2,18 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-<h3 class="text-center">Register</h3>
-<form action="{% url 'register' %}" method="POST" style="width: 500px; margin: auto;">
-    {% csrf_token %}
-    {{ form | crispy }}
-    <button type="submit" class="btn btn-warning">Submit</button>
-</form>
+
+<div class="auth-wrapper">
+    <h3>Create an account</h3>
+    <p style="text-align:center;color:var(--ink-muted);font-size:.9rem;margin-bottom:1.75rem;">Join our community of writers and readers.</p>
+    <form action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-warning" style="width:100%;margin-top:.5rem;">Create Account</button>
+    </form>
+    <p style="text-align:center;margin-top:1.25rem;font-size:.88rem;color:var(--ink-muted);">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+    </p>
+</div>
 
 {% endblock %}

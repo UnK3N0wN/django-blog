@@ -3,31 +3,40 @@
 {% block content %}
 
 <div class="row">
-    <!-- Left Sidebar -->
-    <!-- Load the side bar here -->
     {% include 'dashboard/sidebar.html' %}
 
-    <!-- Right Side Content -->
     <div class="col-md-9">
-        <span>Logged in as <b>{{ user }}</b></span>
+        <p style="color:var(--ink-muted);font-size:.88rem;margin-bottom:1.25rem;">
+            Logged in as <strong style="color:var(--ink);">{{ user }}</strong>
+        </p>
+
         <div class="row">
-            <div class="col">
-                <div class="card border-default mb-3">
-                    <div class="card-header text-center text-uppercase font-weight-bold">All Categories</div>
-                    <div class="card-body text-dark">
-                        <h5 class="card-title text-center">{{ category_count }}</h5>
+            <!-- Categories card -->
+            <div class="col-sm-6 mb-3">
+                <div class="card border-default">
+                    <div class="card-header text-center text-uppercase font-weight-bold">
+                        <i class="fa fa-folder-o" style="margin-right:.4rem;color:var(--accent);"></i>All Categories
+                    </div>
+                    <div class="card-body text-dark" style="text-align:center;padding:2rem 1.2rem;">
+                        <div class="card-title">{{ category_count }}</div>
+                        <a href="{% url 'categories' %}" class="btn btn-sm btn-warning" style="margin-top:.75rem;">Manage</a>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="card border-default mb-3">
-                    <div class="card-header text-center text-uppercase font-weight-bold">All Posts</div>
-                    <div class="card-body text-dark">
-                        <h5 class="card-title text-center">{{ blogs_count }}</h5>
+
+            <!-- Posts card -->
+            <div class="col-sm-6 mb-3">
+                <div class="card border-default">
+                    <div class="card-header text-center text-uppercase font-weight-bold">
+                        <i class="fa fa-file-text-o" style="margin-right:.4rem;color:var(--accent);"></i>All Posts
+                    </div>
+                    <div class="card-body text-dark" style="text-align:center;padding:2rem 1.2rem;">
+                        <div class="card-title">{{ blogs_count }}</div>
+                        <a href="{% url 'posts' %}" class="btn btn-sm btn-warning" style="margin-top:.75rem;">Manage</a>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- /row -->
     </div>
 </div>
 

@@ -3,23 +3,24 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <div class="row">
-    <!-- Left Sidebar -->
-    <!-- Load the side bar here -->
     {% include 'dashboard/sidebar.html' %}
 
-    <!-- Right Side Content -->
     <div class="col-md-9">
         {% if perms.auth.add_user %}
         <h2>Edit User</h2>
-
-        <form action="#" method="POST" >
+        <!-- FIX: action was "#", now uses the correct named URL -->
+        <form action="{% url 'edit_user' pk=user_obj.id %}" method="POST">
             {% csrf_token %}
             {{ form | crispy }}
-            <button type="submit" class="btn btn-warning">Submit</button>
+            <button type="submit" class="btn btn-warning">Save Changes</button>
+            <a href="{% url 'users' %}" class="btn btn-outline-secondary" style="margin-left:.5rem;">Cancel</a>
         </form>
         <br>
         {% else %}
-        <h5>You do not have permission to view this page.</h5>
+        <div style="padding:2rem 0;color:var(--ink-muted);">
+            <i class="fa fa-lock fa-2x" style="margin-bottom:.75rem;display:block;color:var(--ink-muted);"></i>
+            <h5>You do not have permission to view this page.</h5>
+        </div>
         {% endif %}
     </div>
 </div>

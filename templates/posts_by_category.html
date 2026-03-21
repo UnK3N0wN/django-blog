@@ -1,28 +1,32 @@
 {% extends 'base.html' %}
 
-{% block content%}
+{% block content %}
 
-  
+<h3 class="text-uppercase text-warning" style="letter-spacing:2px;margin-bottom:1.5rem;">
+    {{ category }}
+</h3>
 
-  <!-- Featured Posts-->
-  <h3 class="text-uppercase text-warning" style="letter-spacing: 2px">Category - {{ category }}</h3>
-  <div class="row mb-2">
-    {% if posts %}
-    {% for post in posts %}
-        <div class="col-md-6">
-          <div class="card border-0" >
-            <div class="card-body">
-              <h3><a href="{% url 'blogs' post.slug %}" class="text-dark">{{ post.title }}</a></h3>
-              <small class="mb-1 text-muted">{{ post.created_at | timesince }} ago | {{ post.author }}</small>
-              <p class="card-text">{{ post.short_description | truncatewords:25 }}</p>
-            </div>
-          </div>
-        </div>
-    {% endfor %}
-    {% else %}
-    <p>No posts found in this category.</p>
-    {% endif %}
+{% if posts %}
+<div class="row mb-2">
+  {% for post in posts %}
+  <div class="col-md-6">
+    <div class="card border-0">
+      <div class="card-body">
+        <h3><a href="{% url 'blogs' post.slug %}" class="text-dark">{{ post.title }}</a></h3>
+        <small class="mb-1 text-muted">{{ post.created_at | timesince }} ago &mdash; {{ post.author }}</small>
+        <p class="card-text">{{ post.short_description | truncatewords:25 }}</p>
+      </div>
+    </div>
   </div>
+  {% endfor %}
 </div>
+
+{% else %}
+<div style="padding:3rem 0;text-align:center;color:var(--ink-muted);">
+    <i class="fa fa-folder-open-o fa-3x" style="margin-bottom:1rem;opacity:.3;display:block;"></i>
+    <p>No posts published in this category yet.</p>
+    <a href="/" class="btn btn-warning" style="margin-top:.75rem;">Back to Home</a>
+</div>
+{% endif %}
 
 {% endblock %}
