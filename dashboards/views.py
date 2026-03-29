@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, HttpResponseForbidden
+from assignments.models import About
 from blogs.models import Blog, Category, Report
 from django.contrib.auth.decorators import login_required
 from .forms import AddUserForm, BlogPostForm, CategoryForm, EditUserForm
@@ -8,22 +9,27 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 # Create your views here.
-@login_required(login_url='login')
+@login_required
 def dashboard(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
     category_count = Category.objects.all().count()
     blogs_count = Blog.objects.all().count()
 
-    context = {
+    return render(request, 'dashboard/dashboard.html', {
         'category_count': category_count,
         'blogs_count': blogs_count,
-    }
-    return render(request, 'dashboard/dashboard.html', context)
+    })
 
 def categories(request):
     return render(request, 'dashboard/categories.html')
 
 @login_required
 def add_category(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Not allowed")
+    
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -37,6 +43,9 @@ def add_category(request):
 
 @login_required
 def edit_category(request, pk):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Not allowed")
+    
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)
@@ -52,10 +61,13 @@ def edit_category(request, pk):
 
 @login_required
 def delete_category(request, pk):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Not allowed")
     category = get_object_or_404(Category, pk=pk)
     category.delete()
     return redirect('categories')
 
+@login_required
 def posts(request):
     posts = Blog.objects.all()
     context = {
