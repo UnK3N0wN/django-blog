@@ -11,6 +11,7 @@
         </p>
 
         <div class="row">
+            {% if user.is_staff %}
             <!-- Categories card -->
             <div class="col-sm-6 mb-3">
                 <div class="card border-default">
@@ -23,6 +24,15 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="col-sm-6 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <p>You are not an admin. You cannot manage categories.</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
             <!-- Posts card -->
             <div class="col-sm-6 mb-3">
@@ -32,7 +42,11 @@
                     </div>
                     <div class="card-body text-dark" style="text-align:center;padding:2rem 1.2rem;">
                         <div class="card-title">{{ blogs_count }}</div>
+                        {% if user.is_staff %}
                         <a href="{% url 'posts' %}" class="btn btn-sm btn-warning" style="margin-top:.75rem;">Manage</a>
+                        {% else %}
+                        <a href="{% url 'posts' %}" class="btn btn-sm btn-warning" style="margin-top:.75rem;">View</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

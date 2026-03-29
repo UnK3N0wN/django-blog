@@ -1,6 +1,7 @@
 from ast import keyword
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
 from .models import Blog, Category, Comment
 from django.db.models import Q
 
@@ -24,6 +25,7 @@ def posts_by_category(request, category_id):
     }
     return render(request, 'posts_by_category.html', context)
 
+@login_required
 def blogs(request, slug):
     single_blog = get_object_or_404(Blog, slug=slug, status='Published')
     if request.method == 'POST':

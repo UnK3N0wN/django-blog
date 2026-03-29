@@ -43,25 +43,30 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+
             user = auth.authenticate(request, username=username, password=password)
+
             if user is not None:
                 auth.login(request, user)
                 messages.success(request, f'👋 Welcome back, {user.username}!')
-                return redirect('dashboard')
-            else:
-                messages.error(request, '❌ Invalid username or password.')
+
+                # ✅ ROLE BASED REDIRECT
+                if user.is_staff:
+                    return redirect('dashboard')
+                else:
+                    return redirect('home')
+
         else:
             messages.error(request, '❌ Invalid username or password.')
+
     else:
         form = AuthenticationForm()
 
-    context = {
-        'form': form,
-    }
-    return render(request, 'login.html', context)
+    return render(request, 'login.html', {'form': form})
 
 
 def logout(request):

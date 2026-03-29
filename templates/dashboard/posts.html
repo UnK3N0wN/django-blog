@@ -37,7 +37,9 @@
                 <td>{{ forloop.counter }}</td>
 
                 <td>
-                    {{ post.title }}
+                    <a href="{% url 'blogs' post.slug %}" class="text-decoration-none">
+                        {{ post.title }}
+                    </a>
 
                     {% if post.reports.count >= 3 %}
                     <span class="badge bg-danger ms-1">

@@ -54,20 +54,18 @@ ROOT_URLCONF = 'blog_main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # ✅ THIS LINE MUST EXIST
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'blogs.context_processors.get_categories',
-                'blogs.context_processors.get_social_links',
             ],
         },
     },
 ]
-
 
 # ── WSGI ──────────────────────────────────────────────
 WSGI_APPLICATION = 'blog_main.wsgi.application'
@@ -117,6 +115,11 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+# Login URL
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
 
 
 # ── Media Files ───────────────────────────────────────
