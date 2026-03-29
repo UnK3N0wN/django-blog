@@ -9,29 +9,6 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 # Create your views here.
-def home(request):
-    # ✅ NOT logged in → show landing page
-    if not request.user.is_authenticated:
-        return render(request, 'landing.html')
-
-    # ✅ Logged-in → show blog page
-    featured_posts = Blog.objects.filter(is_featured=True, status='Published').order_by('updated_at')
-    posts = Blog.objects.filter(is_featured=False, status='Published')
-
-    try:
-        about = About.objects.get()
-    except:
-        about = None
-
-    context = {
-        'featured_posts': featured_posts,
-        'posts': posts,
-        'about': about,
-    }
-
-    return render(request, 'home.html', context)
-
-
 @login_required
 def dashboard(request):
     if not request.user.is_staff:

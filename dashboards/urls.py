@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),  # ✅ landing controller
     path('dashboard/', views.dashboard, name='dashboard'),
 
     path('categories/', views.categories, name='categories'),
