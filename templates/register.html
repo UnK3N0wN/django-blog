@@ -1,19 +1,117 @@
 {% extends 'base.html' %}
-
-{% block content %}
+{% load static %}
 {% load crispy_forms_tags %}
 
-<div class="auth-wrapper">
-    <h3>Create an account</h3>
-    <p style="text-align:center;color:var(--ink-muted);font-size:.9rem;margin-bottom:1.75rem;">Join our community of writers and readers.</p>
-    <form action="{% url 'register' %}" method="POST">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <button type="submit" class="btn btn-warning" style="width:100%;margin-top:.5rem;">Create Account</button>
-    </form>
-    <p style="text-align:center;margin-top:1.25rem;font-size:.88rem;color:var(--ink-muted);">
-        Already have an account? <a href="{% url 'login' %}">Login</a>
-    </p>
+{% block content %}
+
+<style>
+/* 🔥 Background */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: url("{% static 'images/background.jpg' %}") no-repeat center/cover;
+    position: relative;
+}
+
+/* Overlay */
+.auth-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+/* Container */
+.auth-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: 900px;
+    max-width: 95%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Left image */
+.auth-image {
+    flex: 1;
+    background: url("{% static 'images/background.jpg' %}") no-repeat center/cover;
+    display: none;
+}
+
+/* Right form */
+.auth-form {
+    flex: 1;
+    padding: 40px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    color: white;
+}
+
+/* Heading */
+.auth-form h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Paragraph */
+.auth-form p {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+/* Button */
+.auth-form .btn-warning {
+    width: 100%;
+    border-radius: 25px;
+}
+
+/* Link */
+.auth-form a {
+    color: #ffc107;
+}
+
+/* Responsive */
+@media(min-width:768px){
+    .auth-image {
+        display: block;
+    }
+}
+</style>
+
+<div class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- Left Side Image -->
+        <div class="auth-image"></div>
+
+        <!-- Right Side Form -->
+        <div class="auth-form">
+
+            <h3>Welcome back</h3>
+            <p>Sign in to your account to continue.</p>
+
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-warning">Login</button>
+            </form>
+
+            <p style="margin-top:15px;">
+                Don't have an account?
+                <a href="{% url 'register' %}">Register</a>
+            </p>
+
+        </div>
+
+    </div>
+
 </div>
 
 {% endblock %}
