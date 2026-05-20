@@ -2,158 +2,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Django Blog</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheBloggers</title>
 
-    <style>
-        :root {
-            --primary: #c97a2b;
-            --bg: #f8f6f3;
-            --text: #2c2c2c;
-            --muted: #777;
-        }
+<style>
+:root {
+    --primary: #c97a2b;
+    --text: #ffffff;
+    --muted: #d1d1d1;
+    --overlay: rgba(0,0,0,0.6);
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
+/* 🌙 Dark Mode */
+body.dark {
+    --overlay: rgba(0,0,0,0.85);
+}
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
 
-        /* Navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 60px;
-            border-bottom: 1px solid #e5e5e5;
-            background: white;
-        }
+body {
+    background: url("{% static 'images/background.jpg' %}") no-repeat center/cover;
+    background-attachment: fixed;
+    position: relative;
+}
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-        }
+/* Overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    z-index: 0;
+}
 
-        .nav-buttons a {
-            text-decoration: none;
-            margin-left: 12px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-        }
+/* Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 60px;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.08);
+}
 
-        .login {
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
 
-        .register {
-            background: var(--primary);
-            color: white;
-        }
+.nav-buttons a {
+    margin-left: 10px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
 
-        .login:hover {
-            background: var(--primary);
-            color: white;
-        }
+.login {
+    border: 1px solid white;
+    color: white;
+}
 
-        .register:hover {
-            opacity: 0.9;
-        }
+.register {
+    background: var(--primary);
+    color: white;
+}
 
-        /* Hero Section */
-        .hero {
-            height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-        }
+.login:hover {
+    background: white;
+    color: black;
+}
 
-        .hero-content {
-            max-width: 700px;
-        }
+.register:hover {
+    transform: translateY(-2px);
+}
 
-        .hero h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
+/* Toggle */
+.toggle {
+    cursor: pointer;
+    color: white;
+    margin-left: 10px;
+}
 
-        .hero p {
-            color: var(--muted);
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
+/* Sections */
+.section {
+    padding: 100px 20px;
+    text-align: center;
+    color: var(--text);
+    position: relative;
+    z-index: 2;
+}
 
-        .hero a {
-            text-decoration: none;
-            padding: 12px 24px;
-            background: var(--primary);
-            color: white;
-            border-radius: 6px;
-            margin: 5px;
-            display: inline-block;
-        }
+/* Hero */
+.hero h1 {
+    font-size: 50px;
+}
 
-        .hero a.secondary {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
+.hero p {
+    margin: 20px 0;
+    color: var(--muted);
+}
 
-        .hero a:hover {
-            opacity: 0.9;
-        }
+.hero a {
+    padding: 12px 25px;
+    border-radius: 25px;
+    margin: 5px;
+    text-decoration: none;
+    transition: 0.3s;
+}
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #e5e5e5;
-            font-size: 14px;
-            color: var(--muted);
-            background: white;
-        }
-    </style>
+.primary {
+    background: var(--primary);
+    color: white;
+}
+
+.secondary {
+    border: 1px solid white;
+    color: white;
+}
+
+.primary:hover {
+    transform: translateY(-3px);
+}
+
+.secondary:hover {
+    background: white;
+    color: black;
+}
+
+/* Features */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    padding: 20px;
+    width: 220px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Dark section */
+.section.dark {
+    background: rgba(0,0,0,0.5);
+}
+
+/* Animation */
+.fade {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: 0.8s ease;
+}
+
+.fade.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    position: relative;
+    z-index: 2;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <!-- Navbar -->
-    <div class="navbar">
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">TheBloggers</div>
 
-        <div class="logo">TheBloggers</div>
-
-        <div class="nav-buttons">
-            <a href="{% url 'login' %}" class="login">Login</a>
-            <a href="{% url 'register' %}" class="register">Register</a>
-        </div>
+    <div class="nav-buttons">
+        <a href="{% url 'login' %}" class="login">Login</a>
+        <a href="{% url 'register' %}" class="register">Register</a>
+        <span class="toggle" onclick="toggleMode()">🌙</span>
     </div>
+</div>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Django Blog</h1>
-            <p>
-                Discover amazing articles on technology, health, science, and more.
-                Join us and start sharing your ideas today.
-            </p>
+<!-- HERO -->
+<section class="section hero fade">
+    <h1>Welcome to TheBloggers</h1>
+    <p>Write. Share. Inspire the world.</p>
+    <a href="{% url 'login' %}" class="primary">Get Started</a>
+    <a href="{% url 'register' %}" class="secondary">Create Account</a>
+</section>
 
-            <a href="{% url 'login' %}">Get Started</a>
-            <a href="{% url 'register' %}" class="secondary">Create Account</a>
-        </div>
+<!-- FEATURES -->
+<section class="section fade">
+    <h2>Why Choose Us</h2>
+    <div class="features">
+        <div class="card">✍️ Easy Writing</div>
+        <div class="card">🌍 Global Reach</div>
+        <div class="card">⚡ Fast Publishing</div>
     </div>
+</section>
 
-    <!-- Footer -->
-    <div class="footer">
-        Django Blog — Built with ❤️ using Django
-    </div>
+<!-- ABOUT -->
+<section class="section dark fade">
+    <h2>About TheBloggers</h2>
+    <p>
+        TheBloggers is a platform where creativity meets technology.
+        Share your ideas and connect with the world.
+    </p>
+</section>
+
+<!-- CTA -->
+<section class="section fade">
+    <h2>Start Your Journey Today</h2>
+    <a href="{% url 'register' %}" class="primary">Join Now</a>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+    Django Blog — Built with ❤️
+</div>
+
+<!-- JS -->
+<script>
+// 🌙 Dark mode
+function toggleMode() {
+    document.body.classList.toggle("dark");
+}
+
+// ✨ Scroll animation
+const elements = document.querySelectorAll(".fade");
+
+window.addEventListener("scroll", () => {
+    elements.forEach(el => {
+        const pos = el.getBoundingClientRect().top;
+        const screen = window.innerHeight;
+
+        if (pos < screen - 100) {
+            el.classList.add("show");
+        }
+    });
+});
+</script>
 
 </body>
 </html>
