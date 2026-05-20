@@ -5,12 +5,13 @@ Django settings for blog_main project.
 import os
 from pathlib import Path
 from django.contrib.messages import constants as messages_constants
+from dotenv import load_dotenv
 
 # ── Base Directory ───────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ── Load Environment Variables ───────────────────────────────────────
-load_dotenv = os.getenv(BASE_DIR / '.env')
+load_dotenv(str(BASE_DIR / '.env'))
 
 # ── Security ─────────────────────────────────────────
 SECRET_KEY = os.getenv('SECRET_KEY')
