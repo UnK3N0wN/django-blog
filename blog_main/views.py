@@ -65,6 +65,8 @@ def login(request):
                     return redirect('dashboard')
                 else:
                     return redirect('home')
+            else:
+                messages.error(request, '❌ Invalid username or password.')
 
         else:
             messages.error(request, '❌ Invalid username or password.')
