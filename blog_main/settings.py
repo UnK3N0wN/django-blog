@@ -9,11 +9,13 @@ from django.contrib.messages import constants as messages_constants
 # ── Base Directory ───────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ── Load Environment Variables ───────────────────────────────────────
+load_dotenv = os.getenv(BASE_DIR / '.env')
 
 # ── Security ─────────────────────────────────────────
-SECRET_KEY = 'django-insecure-2q9htcji*6#ibyad5cwm5tsih1hkq8dlx&jm8kuwpn2w2n1mu='
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
